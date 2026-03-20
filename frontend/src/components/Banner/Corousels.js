@@ -30,14 +30,16 @@ const Corousels = () => {
   const classes = useStyles();
   const [trending, setTrending] = useState([]);
   const { currency, symbol } = CryptoState();
-  const fetchTrendingCoins = async () => {
-    const { data } = await axios.get(TrendingCoins(currency));
-    setTrending(data);
-  }
-  console.log(trending);
+
   useEffect(() => {
+    const fetchTrendingCoins = async () => {
+      const { data } = await axios.get(TrendingCoins(currency));
+      setTrending(data);
+    };
+
     fetchTrendingCoins();
-  }, [currency])
+  }, [currency]);
+
 const responsive =
   {
     0: {
@@ -50,7 +52,7 @@ const responsive =
  const items = trending.map((coin) => {
     let profit = coin.price_change_percentage_24h >= 0;
     return (
-      <Link className={classes.carouselItem} to={`/coins/${coin.id}`}>
+      <Link className={classes.carouselItem} to={`/coins/${coin.id}`} key={coin.id}>
         <img src={coin?.image}
           alt={coin.name}
           height='80'

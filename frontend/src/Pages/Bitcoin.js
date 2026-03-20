@@ -1,4 +1,3 @@
-import { async } from '@firebase/util';
 import { Button, LinearProgress, makeStyles, Typography } from '@material-ui/core';
 import axios from 'axios';
 import { doc, setDoc } from 'firebase/firestore';
@@ -16,16 +15,15 @@ const Bitcoin = () => {
   const { id } = useParams();
   const [coins, setcoins] = useState();
   const { currency, symbol, user, watchlist, setAlert } = CryptoState();
-  const fetchCoin = async () => {
-    const { data } = await axios.get(SingleCoin(id));
-    setcoins(data);
-  };
-
-  console.log(coins);
 
   useEffect(() => {
+    const fetchCoin = async () => {
+      const { data } = await axios.get(SingleCoin(id));
+      setcoins(data);
+    };
+
     fetchCoin();
-  }, []);
+  }, [id]);
 
   const useStyles = makeStyles((theme) => ({
     container: {

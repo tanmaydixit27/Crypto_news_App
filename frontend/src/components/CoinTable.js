@@ -1,8 +1,6 @@
-import { colors, Container, createTheme, LinearProgress, makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, ThemeProvider, Typography } from '@material-ui/core';
-import axios from 'axios';
+import { Container, createTheme, LinearProgress, makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, ThemeProvider, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom';
-import { CoinList } from '../config/api';
 import { CryptoState } from '../CryptoContext';
 import { coinWithComa } from './Banner/Corousels';
 import { Pagination } from "@material-ui/lab"
@@ -15,8 +13,9 @@ const CoinTable = () => {
     const history = useHistory();
 
     useEffect(() => {
+        setpage(1);
         fetchCoins();
-    }, [currency])
+    }, [currency, fetchCoins])
 
     const darkTheme = createTheme({
         palette: {

@@ -30,21 +30,19 @@ ChartJS.register(
 
 
 const CoinInfo = () => {
-  const {id} = useParams();
+ const {id} = useParams();
  const [historicData,sethistoricData]  = useState();
  const [days,setDays] =  useState(1);
  const {currency} = CryptoState();
- const  fetchHistoricData = async()=>{
-   const {data} = await axios.get(HistoricalChart(id, days,currency));
-   console.log(data.prices);
-   sethistoricData(data.prices);
-  
- }
 
- 
  useEffect(()=>{
+   const fetchHistoricData = async () => {
+     const {data} = await axios.get(HistoricalChart(id, days,currency));
+     sethistoricData(data.prices);
+   };
+
    fetchHistoricData();
- },[currency,days])
+ },[currency, days, id])
 
  const darkTheme = createTheme({
   palette:{
@@ -118,7 +116,7 @@ const classes = useStyles();
            width:"100%",
          }}>
            {chartDays.map(day=>(
-             <SelectButton onClick={()=>setDays(day.value)}  selected={day.value==days}>{day.label}</SelectButton>
+             <SelectButton key={day.value} onClick={()=>setDays(day.value)} selected={day.value === days}>{day.label}</SelectButton>
            ))}
          </div>
        </>
