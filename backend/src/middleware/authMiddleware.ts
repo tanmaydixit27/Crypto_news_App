@@ -10,6 +10,12 @@ export const verifyFirebaseToken = async (
   res: Response,
   next: NextFunction
 ) => {
+  if (!auth) {
+    return res.status(503).json({
+      error: 'Firebase auth is not configured. Add backend/firebase-service-account.json.',
+    });
+  }
+
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'No token provided' });

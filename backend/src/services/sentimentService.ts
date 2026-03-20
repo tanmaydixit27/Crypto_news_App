@@ -24,6 +24,11 @@ export const analyseHeadline = (headline: string): AnalysisResult => {
 };
 
 export const storeSentiment = async (result: SentimentResult) => {
+  if (!firestore) {
+    console.warn('Skipping Firestore write because Firebase is not configured.');
+    return;
+  }
+
   await firestore.collection('sentiments').add(result);
 };
 

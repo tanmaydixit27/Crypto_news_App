@@ -11,10 +11,11 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "noEmit": true,
-    "allowImportingTsExtensions": false,
+    "noEmit": false,
+    "allowImportingTsExtensions": false
   },
   "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules", "src/node_modules"],
   "ts-node": {
     "esm": true
   }
