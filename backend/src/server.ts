@@ -8,7 +8,7 @@ import { batchSentiment } from './services/sentimentService.js';
 
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: '*', methods: ['GET', 'POST'] },
+  cors: { origin: env.FRONTEND_ORIGINS, methods: ['GET', 'POST'] },
 });
 
 setSocketIO(io);

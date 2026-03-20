@@ -74,6 +74,7 @@ Create/update `backend/.env`:
 ```env
 PORT=5000
 FIREBASE_PROJECT_ID=your-firebase-project-id
+FRONTEND_ORIGIN=http://localhost:3000
 # Optional: custom Firestore DB name (defaults to "(default)")
 # FIREBASE_DATABASE_ID=(default)
 ```
@@ -81,6 +82,7 @@ FIREBASE_PROJECT_ID=your-firebase-project-id
 Notes:
 
 - `FIREBASE_PROJECT_ID` is required.
+- `FRONTEND_ORIGIN` supports comma-separated origins if needed.
 - Firebase Admin credentials are loaded from `backend/firebase-service-account.json`.
 
 ## Firebase Service Account Setup
