@@ -1,52 +1,34 @@
-import React from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
-import { Layout, Typography, Space } from 'antd';
-
-import { Exchanges, Homepage, News, Cryptocurrencies, CryptoDetails, Navbar } from './components';
 import './App.css';
+import Header from './components/Header';
+import Home from './Pages/Home';
+import Bitcoin from './Pages/Bitcoin';
+import {BrowserRouter, Route} from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import  Alert from './components/Alert';
 
-const App = () => (
-  <div className="app">
-    <div className="navbar">
-      <Navbar />
+function App() {
+  const useStyle = makeStyles(()=>({
+    App:{
+      backgroundColor:"#14161a",
+      color:"#04b5e5",
+      minHeight:'100vh'
+
+
+    }
+  }))
+  const classes = useStyle();
+  return (
+    <>
+    <BrowserRouter>
+    <div className={classes.App}>
+    <Header/>
+    <Route path='/' component={Home} exact ></Route>
+    <Route path='/coins/:id' component={Bitcoin} exact ></Route>
     </div>
-    <div className="main">
-      <Layout>
-        <div className="routes">
-          <Switch>
-            <Route exact path="/">
-              <Homepage />
-            </Route>
-            <Route exact path="/exchanges">
-              <Exchanges />
-            </Route>
-            <Route exact path="/cryptocurrencies">
-              <Cryptocurrencies />
-            </Route>
-            <Route exact path="/crypto/:coinId">
-              <CryptoDetails />
-            </Route>
-            <Route exact path="/news">
-              <News />
-            </Route>
-          </Switch>
-        </div>
-      </Layout>
-      <div className="footer">
-        <Typography.Title level={5} style={{ color: 'white', textAlign: 'center' }}>Made By Tanmay Dixit
-          <Link to="/">
-             Cryptoverse Inc.
-          </Link> <br />
-          All Rights Reserved.
-        </Typography.Title>
-        <Space>
-          <Link to="/">Home</Link>
-          <Link to="/exchanges">Exchanges</Link>
-          <Link to="/news">News</Link>
-        </Space>
-      </div>
-    </div>
-  </div>
-);
+    <Alert/>
+    </BrowserRouter>
+ </>
+  );
+}
 
 export default App;
