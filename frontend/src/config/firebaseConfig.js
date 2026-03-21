@@ -1,14 +1,24 @@
-
-
- // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional.
+// Config is env-only to avoid committing project credentials in source code.
 const firebaseConfig = {
-  apiKey: "AIzaSyDtQ_zhINBcJXZxEidX84oq5fc7uax5iPE",
-  authDomain: "crypto-news-af277.firebaseapp.com",
-  projectId: "crypto-news-af277",
-  storageBucket: "crypto-news-af277.firebasestorage.app",
-  messagingSenderId: "56088703010",
-  appId: "1:56088703010:web:1f5de08ea8a148eebb1a7b",
-  measurementId: "G-YW5E402GKM"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
-  export default firebaseConfig;
+const requiredKeys = ['apiKey', 'authDomain', 'projectId', 'appId'];
+const missingKeys = requiredKeys.filter((key) => !firebaseConfig[key]);
+
+if (missingKeys.length > 0) {
+  throw new Error(
+    `Missing Firebase config env vars: ${missingKeys
+      .map((key) => `REACT_APP_FIREBASE_${key.replace(/[A-Z]/g, (m) => `_${m}`).toUpperCase().replace(/^_/, '')}`)
+      .join(', ')}`
+  );
+}
+
+export default firebaseConfig;

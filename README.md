@@ -74,12 +74,29 @@ backend/firebase-service-account.json
 
 ### 2) Frontend env
 
-Create `frontend/.env` from `frontend/.env.example`:
+Create `frontend/.env`:
 
 ```env
 REACT_APP_API_BASE_URL=http://localhost:5000
 REACT_APP_SOCKET_URL=http://localhost:5000
+REACT_APP_FIREBASE_API_KEY=your-api-key
+REACT_APP_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
+REACT_APP_FIREBASE_PROJECT_ID=your-project-id
+REACT_APP_FIREBASE_STORAGE_BUCKET=your-project-id.firebasestorage.app
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+REACT_APP_FIREBASE_APP_ID=your-app-id
+REACT_APP_FIREBASE_MEASUREMENT_ID=your-measurement-id
 ```
+
+### 3) Firebase Auth Google provider setup (required for OAuth)
+
+In Firebase Console for the same `projectId` used by frontend and backend:
+
+1. Go to `Authentication -> Sign-in method` and enable `Google`.
+2. Go to `Authentication -> Settings -> Authorized domains` and add your frontend domain(s), for example:
+   - `localhost` for local dev
+   - your deployed frontend domain
+3. Ensure backend service account is from the same Firebase project.
 
 ## Install Dependencies
 

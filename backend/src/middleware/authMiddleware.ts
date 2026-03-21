@@ -12,7 +12,8 @@ export const verifyFirebaseToken = async (
 ) => {
   if (!auth) {
     return res.status(503).json({
-      error: 'Firebase auth is not configured. Add backend/firebase-service-account.json.',
+      error:
+        'Firebase auth is not configured. Provide backend/firebase-service-account.json or FIREBASE_SERVICE_ACCOUNT_JSON.',
     });
   }
 

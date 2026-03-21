@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -7,7 +7,7 @@ import { AppBar, Box, Button, Tab, Tabs } from '@material-ui/core';
 import Login from './Login';
 import Signup from './Signup';
 import GoogleButton from "react-google-button"
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, getRedirectResult, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { CryptoState } from '../../CryptoContext';
 
@@ -38,6 +38,7 @@ export default function AuthModal() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(0);
+  const { setAlert } = CryptoState();
 
   const handleOpen = () => {
     setOpen(true);
@@ -52,24 +53,61 @@ export default function AuthModal() {
     setValue(newValue);
   };
 
-  const { setAlert } = CryptoState();
   const googleProvider = new GoogleAuthProvider();
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, googleProvider).then(res => {
+
+  useEffect(() => {
+    const handleRedirectSignIn = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (!result?.user) return;
+        setAlert({
+          open: true,
+          message: `Sign in successful. Welcome ${result.user.email}`,
+          type: "success",
+        });
+      } catch (error) {
+        setAlert({
+          open: true,
+          message: getGoogleAuthErrorMessage(error),
+          type: "error",
+        });
+      }
+    };
+
+    handleRedirectSignIn();
+  }, [setAlert]);
+
+  const signInWithGoogle = async () => {
+    googleProvider.setCustomParameters({ prompt: 'select_account' });
+    try {
+      const res = await signInWithPopup(auth, googleProvider);
       setAlert({
         open: true,
-        message: `Sign up Successful. Welcome ${res.user.email}`,
+        message: `Sign in successful. Welcome ${res.user.email}`,
         type: "success",
-      })
+      });
       handleClose();
-    }).catch((error) => {
+    } catch (error) {
+      if (error?.code === 'auth/popup-blocked') {
+        await signInWithRedirect(auth, googleProvider);
+        return;
+      }
       setAlert({
         open: true,
-        message: error.message,
-        type: error,
-      })
-    })
-  }
+        message: getGoogleAuthErrorMessage(error),
+        type: "error",
+      });
+    }
+  };
+
+  const getGoogleAuthErrorMessage = (error) => {
+    const code = error?.code || '';
+    if (code === 'auth/popup-closed-by-user') return 'Google sign-in was canceled before completion.';
+    if (code === 'auth/popup-blocked') return 'Popup blocked by browser. We are redirecting you to continue sign-in.';
+    if (code === 'auth/unauthorized-domain') return 'This domain is not authorized in Firebase Auth. Add it in Firebase Console -> Authentication -> Settings -> Authorized domains.';
+    if (code === 'auth/operation-not-allowed') return 'Google provider is disabled in Firebase Auth. Enable Google under Firebase Console -> Authentication -> Sign-in method.';
+    return error?.message || 'Google sign-in failed. Please try again.';
+  };
 
 
   return (

@@ -1,0 +1,12 @@
+# Secrets and local environment files
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+!**/.env.example
+!**/.env.*.example
+
+# Firebase service account keys
+**/firebase-service-account.json
+**/*service-account*.json
